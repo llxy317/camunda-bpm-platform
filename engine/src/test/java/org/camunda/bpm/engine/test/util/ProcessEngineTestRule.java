@@ -31,9 +31,11 @@ import java.util.TimerTask;
 
 import junit.framework.AssertionFailedError;
 
+import org.camunda.bpm.engine.AuthorizationService;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.authorization.Authorization;
 import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
@@ -369,29 +371,29 @@ public class ProcessEngineTestRule extends TestWatcher {
     CaseControlRuleImpl caseControlRule = new CaseControlRuleImpl(expression);
     return caseControlRule;
   }
-  
+
 
   public void deleteHistoryCleanupJobs() {
     HistoryService historyService = processEngine.getHistoryService();
     final List<Job> jobs = historyService.findHistoryCleanupJobs();
     for (final Job job : jobs) {
       final String jobId = job.getId();
-      
+
       processEngineRule
         .getProcessEngineConfiguration()
         .getCommandExecutorTxRequired()
         .execute((Command<Void>) commandContext -> {
           JobManager jobManager = commandContext.getJobManager();
-          
+
           JobEntity jobEntity = jobManager.findJobById(jobId);
-          
+
           jobEntity.delete();
           commandContext.getHistoricJobLogManager().deleteHistoricJobLogByJobId(job.getId());
           return null;
         });
     }
   }
-  
+
   public CaseInstance createCaseInstanceByKey(String caseDefinitionKey) {
     return createCaseInstanceByKey(caseDefinitionKey, null, null);
   }
@@ -410,6 +412,27 @@ public class ProcessEngineTestRule extends TestWatcher {
         .businessKey(businessKey)
         .setVariables(variables)
         .create();
+  }
+
+  public void deleteAllAuthorizations() {
+    AuthorizationService authorizationService = processEngine.getAuthorizationService();
+
+    authorizationService.createAuthorizationQuery()
+      .list()
+      .stream()
+      .map(Authorization::getId)
+      .forEach(authorizationService::deleteAuthorization);
+  }
+
+
+  public void deleteAllStandaloneTasks() {
+    TaskService taskService = processEngine.getTaskService();
+
+    taskService.createTaskQuery()
+      .list()
+      .stream()
+      .filter(t -> t.getProcessInstanceId() == null && t.getCaseInstanceId() == null)
+      .forEach(t -> taskService.deleteTask(t.getId(), true));
   }
 
   protected static class InterruptTask extends TimerTask {
