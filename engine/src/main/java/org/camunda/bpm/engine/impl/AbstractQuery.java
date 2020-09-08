@@ -417,4 +417,8 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     maxResultsLimitEnabled = false;
   }
 
+  public boolean getCmmnEnabled() {
+    return Context.getProcessEngineConfiguration().isCmmnEnabled();
+  }
+
 }

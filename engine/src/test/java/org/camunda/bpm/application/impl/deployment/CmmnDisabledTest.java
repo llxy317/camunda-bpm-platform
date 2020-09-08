@@ -92,9 +92,9 @@ public class CmmnDisabledTest {
   @After
   public void tearDown() {
     identityService.clearAuthentication();
+    engineRule.getProcessEngineConfiguration().setAuthorizationEnabled(false);
     engineTestRule.deleteAllAuthorizations();
     engineTestRule.deleteAllStandaloneTasks();
-    engineRule.getProcessEngineConfiguration().setAuthorizationEnabled(false);
   }
 
   @Test
@@ -183,10 +183,7 @@ public class CmmnDisabledTest {
     // then
     assertThat(tasks).extracting("id").containsExactlyInAnyOrder(standaloneTask.getId(), processInstanceTask.getId());
 
-
-
     fail("implement");
-    fail("enable authorization");
   }
 
   @Test
@@ -197,6 +194,10 @@ public class CmmnDisabledTest {
     fail("rename test method");
   }
 
+  @Test
+  public void missingTestCases() {
+    fail("verify that left join behavior with CMMN tasks is tested");
+  }
 
 
 }

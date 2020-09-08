@@ -685,11 +685,16 @@
     <bind name="authGroupIds" value="authCheck.authGroupIds" />
     <bind name="atomicChecks" value="authCheck.permissionChecks.atomicChecks" />
     <bind name="disjunctive" value="authCheck.permissionChecks.disjunctive" />
+    <bind name="useLeftJoin" value="authCheck.useLeftJoin" />
     <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
   </sql>
 
   <sql id="authCheckJoinWithoutOnClauseWithBinding">
-    left JOIN (
+    <choose>
+      <when test="useLeftJoin != null &amp;&amp; useLeftJoin == true">left join</when>
+      <otherwise>inner join</otherwise>
+    </choose>
+    (
     SELECT A.*
     FROM ${prefix}ACT_RU_AUTHORIZATION A
     WHERE A.TYPE_ &lt; 2     
