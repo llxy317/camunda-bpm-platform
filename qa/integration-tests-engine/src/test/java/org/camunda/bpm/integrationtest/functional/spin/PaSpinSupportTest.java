@@ -81,8 +81,9 @@ public class PaSpinSupportTest extends AbstractFoxPlatformIntegrationTest {
 
     for (ProcessEnginePlugin plugin : processEnginePlugins) {
       if (plugin.getClass().getName().contains("Spin")) {
+        System.err.println("TUK: " + plugin.getClass().getName());
         spinPluginFound = true;
-        break;
+//        break;
       }
     }
 
