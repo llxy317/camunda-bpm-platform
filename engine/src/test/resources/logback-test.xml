@@ -20,6 +20,7 @@
   <logger name="org.camunda" level="info" />
 
   <logger name="org.camunda.bpm.engine.test" level="debug" />
+  <logger name="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity" level="debug" />
 
 <!--   <logger name="org.camunda.bpm.engine.impl.persistence.entity" level="debug" /> -->
 <!--   <logger name="org.camunda.bpm.engine.history" level="debug" /> -->
@@ -31,7 +32,7 @@
 <!--   <logger name="org.camunda.bpm.engine.cmmn.behavior" level="debug" /> -->
 <!--   <logger name="org.camunda.bpm.engine.cmmn.operation" level="debug" /> -->
 
-<!--   <logger name="org.camunda.bpm.engine.cmd" level="debug" /> -->
+  <logger name="org.camunda.bpm.engine.cmd" level="debug" />
 <!--   <logger name="org.camunda.bpm.engine.persistence" level="debug" /> -->
 <!--   <logger name="org.camunda.bpm.engine.tx" level="debug" /> -->
 <!--   <logger name="org.camunda.bpm.engine.cfg" level="debug" /> -->
