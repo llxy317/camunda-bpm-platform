@@ -856,9 +856,13 @@
         </when>
         <otherwise>
           and (
-          (RES.CASE_EXECUTION_ID_ IS NOT NULL)
-          OR
-          (AUTH.RESOURCE_ID_ IS NOT NULL)
+          <!-- Task query does not use left join if cmmn is disabled, 
+            so we don't need to account for case tasks in this case. -->
+          <if test="authCheck.useLeftJoin" >
+            (RES.CASE_EXECUTION_ID_ IS NOT NULL)
+            OR
+          </if>
+            (AUTH.RESOURCE_ID_ IS NOT NULL)
             <if test="authCheck.permissionChecks.compositeChecks != null &amp;&amp; authCheck.permissionChecks.compositeChecks.size > 0"> 
               AND
               <foreach item="permCheck" index="index" collection="authCheck.permissionChecks.compositeChecks" separator="AND">

@@ -178,22 +178,6 @@ public class CmmnDisabledTest {
 
     // then
     assertThat(tasks).extracting("id").containsExactlyInAnyOrder(standaloneTask.getId(), processInstanceTask.getId());
-
-    fail("implement");
   }
-
-  @Test
-  public void testTaskQueryWithoutCaseExecutionCheck() {
-    taskService.createTaskQuery().list();
-
-
-    fail("rename test method");
-  }
-
-  @Test
-  public void missingTestCases() {
-    fail("verify that left join behavior with CMMN tasks is tested");
-  }
-
 
 }
